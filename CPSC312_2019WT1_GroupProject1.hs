@@ -69,7 +69,7 @@ solved :: [(Integer, Integer)] -> Bool
 solved s = if (findBlanks s) == [] then True else False
 
 
---  produce list of valid next boards from board
+-- produce list of valid next boards from board
 nextBoards :: [(Integer, Integer)] -> [[(Integer, Integer)]]
 nextBoards s = (keepOnlyValid (head (findBlanks s)) (fillWith1to9 (head (findBlanks s)) s))
 
@@ -77,8 +77,7 @@ nextBoards s = (keepOnlyValid (head (findBlanks s)) (fillWith1to9 (head (findBla
 findBlanks :: [(Integer, Integer)] -> [Integer]
 findBlanks s = foldr (\ x y -> if notElem x (position s) then x:y else y) [] [1..81]
 
-
--- get the position
+-- get all positions
 position :: [(Integer, Integer)] -> [Integer]
 position s = map (\(v,p) -> p) s
 
@@ -125,7 +124,7 @@ sameBlockHelper i
    | elem i [61,62,63,70,71,72,79,80,81] = [61,62,63,70,71,72,79,80,81]
 
 
--- get the value
+-- get all values
 value :: [(Integer, Integer)] -> [Integer]
 value s = map (\(v,p) -> v) s
 
