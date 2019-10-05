@@ -29,9 +29,10 @@ testSudoku1 = [(2,1),(7,2),(4,3),(9,5),(1,6),(5,9),
               (7,71),
               (8,73),(3,76),(4,77),(9,78)]
 
-testSudoku2 = [(2,1),(7,2),(4,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
-              (1,10),(3,11),(8,12),(5,13),(2,14),(6,15),(4,16),(9,17),(7,18),
-              (6,19),(5,20),(9,21),(4,22),(7,23),(3,24),(2,25),(8,26),(1,27),
+-- Fail initialCheck
+testSudoku2 = [(1,1),(1,2),(1,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
+              (1,10),(1,11),(1,12),(5,13),(2,14),(6,15),(4,16),(9,17),(7,18),
+              (1,19),(1,20),(1,21),(4,22),(7,23),(3,24),(2,25),(8,26),(1,27),
               (3,28),(2,29),(1,30),(9,31),(6,32),(4,33),(7,34),(5,35),(8,36),
               (9,37),(8,38),(5,39),(1,40),(3,41),(7,42),(6,43),(4,44),(2,45),
               (7,46),(4,47),(6,48),(2,49),(8,50),(5,51),(9,52),(1,53),(3,54),
@@ -52,7 +53,10 @@ testSudoku3 = [(2,1),(7,2),(4,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
 
 
 
-solve = solveS
+solve s = if initialCheck s then solveS s else [] 
+
+initialCheck :: [(Integer, Integer)] -> Bool
+initialCheck s = foldr (\ x y -> if validBoard x s then True && y else False && y) True (position s)
 
 solveS :: [(Integer, Integer)] -> [[(Integer, Integer)]]
 solveS s = if solved s then [s] else solveloS (nextBoards s)
@@ -64,6 +68,7 @@ solveloS los = foldr (\ x y -> (solveS x)++y) [] los
 solved :: [(Integer, Integer)] -> Bool
 solved s = if (findBlanks s) == [] then True else False
 
+
 --  produce list of valid next boards from board
 nextBoards :: [(Integer, Integer)] -> [[(Integer, Integer)]]
 nextBoards s = (keepOnlyValid (head (findBlanks s)) (fillWith1to9 (head (findBlanks s)) s))
@@ -71,6 +76,7 @@ nextBoards s = (keepOnlyValid (head (findBlanks s)) (fillWith1to9 (head (findBla
 -- find the place with no value
 findBlanks :: [(Integer, Integer)] -> [Integer]
 findBlanks s = foldr (\ x y -> if notElem x (position s) then x:y else y) [] [1..81]
+
 
 -- get the position
 position :: [(Integer, Integer)] -> [Integer]
