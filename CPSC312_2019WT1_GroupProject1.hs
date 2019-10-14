@@ -11,7 +11,7 @@
 -- solve testSudoku1
 
 -- with the first integer as Value and second integer as position
-data Sudoku = Sudoku [(Integer, Integer)]
+type Sudoku = [(Integer, Integer)]
 
 testSudoku = [(2,1),(7,2),(4,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
               (1,10),(3,11),(8,12),(5,13),(2,14),(6,15),(4,16),(9,17),(7,18),
