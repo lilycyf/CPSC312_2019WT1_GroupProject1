@@ -1,8 +1,8 @@
 -- CPSC 312 Project 1
 -- Name: Yifei Chen
 -- Student Number: 16394264
--- Name: 
--- Student Number: 
+-- Name: Zhe Li
+-- Student Number: 88792486 
 -- Name: 
 -- Student Number: 
 
