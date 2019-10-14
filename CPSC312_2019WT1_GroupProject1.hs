@@ -11,7 +11,7 @@
 -- solve testSudoku1
 
 -- with the first integer as Value and second integer as position
-data Sudoku = Sudoku [(Integer, Integer)]
+type Sudoku = [(Integer, Integer)]
 
 testSudoku = [(2,1),(7,2),(4,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
               (1,10),(3,11),(8,12),(5,13),(2,14),(6,15),(4,16),(9,17),(7,18),
@@ -57,8 +57,31 @@ testSudoku3 = [(2,1),(7,2),(4,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
               (5,64),(9,65),(3,66),(6,67),(1,68),(2,69),(8,70),(7,71),(4,72),
               (8,73),(1,74),(7,75),(3,76),(4,77),(9,78),(5,79)]
 
+data State = State InternalState
+      deriving(Eq, Ord, Show)
 
+data Result = EndOfGame String State
+            | ContinueGame String State
+      deriving(Eq, Show)
 
+type Game = State -> Result
+type InternalState = [(Integer,Integer)]
+
+start :: Game
+start state = ContinueGame "start" state
+
+setSudoku pair sudoku = pair : sudoku
+
+readInput :: [(Integer,Integer)]
+readInput sudoku=
+    do
+      putStrLn "Enter the position of the known numbers(use pair where the first number is the value and second is the position, type 0 if finish)"
+      pair <- getLine
+      if (pair == "0")
+        then return solve sudoku
+      else do
+        sudoku = pair : sudoku
+        return readInput sudoku
 
 solve s = if initialCheck s then solveS s else []
 
