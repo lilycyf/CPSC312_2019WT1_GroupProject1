@@ -1,10 +1,10 @@
 -- CPSC 312 Project 1
 -- Name: Yifei Chen
 -- Student Number: 16394264
--- Name: 
--- Student Number: 
--- Name: 
--- Student Number: 
+-- Name:
+-- Student Number:
+-- Name: Yixin Wang
+-- Student Number: 36851582
 
 
 -- To run it, try:
@@ -60,7 +60,7 @@ testSudoku3 = [(2,1),(7,2),(4,3),(8,4),(9,5),(1,6),(3,7),(6,8),(5,9),
 
 
 
-solve s = if initialCheck s then solveS s else [] 
+solve s = if initialCheck s then solveS s else []
 
 initialCheck :: [(Integer, Integer)] -> Bool
 initialCheck s = foldr (\ x y -> if validBoard x s then True && y else False && y) True (position s)
@@ -97,8 +97,8 @@ fillWith1to9 i s = [(x,i):s | x<-[1..9]]
 -- pick a position to fill with a value and remove all the invalid Sudoku
 keepOnlyValid :: Integer -> [[(Integer, Integer)]] -> [[(Integer, Integer)]]
 keepOnlyValid i [] = []
-keepOnlyValid i (h:t) = if (validBoard i h) 
-   then h: keepOnlyValid i t 
+keepOnlyValid i (h:t) = if (validBoard i h)
+   then h: keepOnlyValid i t
    else keepOnlyValid i t
 
 -- check the cloum, row, and block that the position i is in
@@ -106,7 +106,7 @@ validBoard :: Integer -> [(Integer, Integer)] -> Bool
 validBoard i s = (valid sameColum i s) && (valid sameRow i s) && (valid sameBlock i s)
 
 valid :: (Integer -> [(Integer, Integer)] -> [(Integer, Integer)]) -> Integer -> [(Integer, Integer)] -> Bool
-valid f i s = if (length (foldr (\ v y -> if notElem v y then v:y else y) [] (value (f i s)))) == length (f i s) 
+valid f i s = if (length (foldr (\ v y -> if notElem v y then v:y else y) [] (value (f i s)))) == length (f i s)
    then True else False
 
 sameColum :: Integer -> [(Integer, Integer)] -> [(Integer, Integer)]
@@ -119,7 +119,7 @@ sameBlock :: Integer -> [(Integer, Integer)] -> [(Integer, Integer)]
 sameBlock i s = foldr (\ (v,p) y -> if elem p (sameBlockHelper i) then (v,p):y else y) [] s
 
 sameBlockHelper :: Integer -> [Integer]
-sameBlockHelper i 
+sameBlockHelper i
    | elem i [1,2,3,10,11,12,19,20,21] = [1,2,3,10,11,12,19,20,21]
    | elem i [4,5,6,13,14,15,22,23,24] = [4,5,6,13,14,15,22,23,24]
    | elem i [7,8,9,16,17,18,25,26,27] = [7,8,9,16,17,18,25,26,27]
@@ -134,4 +134,3 @@ sameBlockHelper i
 -- get all values
 value :: [(Integer, Integer)] -> [Integer]
 value s = map (\(v,p) -> v) s
-
