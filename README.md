@@ -1,5 +1,4 @@
 # CPSC312_2019WT1_GroupProject1: Sudoku #
-==================================
 
 ## Introduction
 
