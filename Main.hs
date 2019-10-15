@@ -1,9 +1,24 @@
+-- CPSC 312 Project 1
+-- Name: Yifei Chen
+-- Student Number: 16394264
+-- Name: Zhe Li
+-- Student Number: 88792486
+-- Name: Yixin Wang
+-- Student Number: 36851582
+
+
 module Main where
+
 import Data.List
 
+-- To run it, try:
+-- main
 
+-- with the first integer as value and second integer as position
 type Sudoku = [(Integer, Integer)]
 
+
+-- test case
 testS = [(2,1),(7,2),(4,3),(9,5),(1,6),(5,9),
               (1,10),(5,13),(9,17),
               (6,19),(3,24),(2,25),(8,26),
@@ -14,6 +29,7 @@ testS = [(2,1),(7,2),(4,3),(9,5),(1,6),(5,9),
               (7,71),
               (8,73),(3,76),(4,77),(9,78)]
 
+-- a recusion body that enables user to type in the input and solve the sudoku
 play s =
 	if length s == 81
 		then do
@@ -51,7 +67,7 @@ play s =
 								else do
 									play newS
 
-
+-- helper function to print the grids
 renderS :: Sudoku -> Integer -> IO()
 
 renderS s 81 =
@@ -64,44 +80,76 @@ renderS [] n =
 		then do
          putStr "_"
          putStrLn ""
-         renderS [] (n+1)
+         if mod n 27 == 0
+            then do
+              putStrLn "======================"
+              renderS [] (n+1)
+            else do
+              renderS [] (n+1)
 		else do
-         putStr "_"
-         renderS [] (n+1)
+      if mod n 3 == 0
+        then do
+          putStr "_ | "
+          renderS [] (n+1)
+        else do
+          putStr "_ "
+          renderS [] (n+1)
 
 renderS (h:t) n
 	| (snd h) == n 	= if mod n 9 == 0
 						          then do
                            putStr(show (fst h))
                            putStrLn ""
-                           renderS t (n + 1)
+                           if mod n 27 == 0
+                              then do
+                                putStrLn "======================"
+                                renderS t (n + 1)
+                              else do
+                                renderS t (n + 1)
 						          else do
-                           putStr(show (fst h))
-                           renderS t (n + 1)
+                        if mod n 3 == 0
+                          then do
+                            putStr(show (fst h))
+                            putStr " | "
+                            renderS t (n + 1)
+                          else do
+                            putStr(show (fst h))
+                            putStr " "
+                            renderS t (n + 1)
 	| otherwise 	= if mod n 9 == 0
 						        then do
                          putStr "_"
                          putStrLn ""
-                         renderS (h:t) (n + 1)
+                         if mod n 27 == 0
+                            then do
+                              putStrLn "======================"
+                              renderS (h:t) (n + 1)
+                            else do
+                              renderS (h:t) (n + 1)
 						        else do
-                         putStr "_"
-                         renderS (h:t) (n + 1)
+                      if mod n 3 == 0
+                        then do
+                          putStr "_ | "
+                          renderS (h:t) (n + 1)
+                        else do
+                          putStr "_ "
+                          renderS (h:t) (n + 1)
 
 render :: Sudoku -> IO()
 render s = renderS s 1
 
 
-
+-- give a hint that is the first empty cell in the present sudoku according to the solution
 giveHint:: Sudoku -> Sudoku -> Sudoku
 giveHint soln [] = [head soln]
 giveHint (h1:t1) (h2:t2)
 	| (snd h1) == (snd h2)	= h2 : giveHint t1 t2
-	| otherwise 			= h1 : h2 : t2 
+	| otherwise 			= h1 : h2 : t2
 
-
+-- put the pair input given by user to the correct place in sudoku
 makeMove:: (Integer, Integer) -> Sudoku -> Sudoku
 makeMove (v, p) [] = [(v, p)]
-makeMove (v, p) (h:t) 
+makeMove (v, p) (h:t)
 	| p > (snd h) 	= h : makeMove (v, p) t
 	| otherwise 	= (v, p) : h : t
 
@@ -180,11 +228,15 @@ sameBlockHelper i
 value :: [(Integer, Integer)] -> [Integer]
 value s = map (\(v,p) -> v) s
 
+
+-- a sort helper that put the pair of integer in increasing order in sudoku
 sortGT (av, ap) (bv, bp)
 	| ap < bp 	= LT
 	| otherwise = GT
 
-myRead s n =	
+
+-- read input from the user
+myRead s n =
 	if n < 17
 		then do
 			putStrLn "Input your sudoku movement position Natural[1, 81]"
@@ -201,4 +253,4 @@ myRead s n =
 -- initial state: [], 0
 main = do
 	putStrLn "Please input your sudoku game!"
-	myRead [] 0 
+	myRead [] 0
