@@ -36,10 +36,12 @@ play s =
 			putStrLn "The sudoku is solved:"
 			render s
 			putStrLn ""
+                        askForSave s
 		else do
 			putStrLn "The current game is:"
 			render s
 			putStrLn ""
+			askForSave s
 			let oldSolution = sortBy sortGT (head (solve s))
 			putStrLn "Do you need hint? (yes/no)"
 			hint <- getLine
@@ -78,11 +80,11 @@ renderS s 81 =
 renderS [] n =
 	if mod n 9 == 0
 		then
-         if mod n 27 == 0
-            then
-              "_" ++ "\n" ++ "======================" ++ "\n" ++ renderS [] (n+1)
-            else
-              "_" ++ "\n" ++ renderS [] (n+1)
+      if mod n 27 == 0
+        then
+          "_" ++ "\n" ++ "======================" ++ "\n" ++ renderS [] (n+1)
+        else
+          "_" ++ "\n" ++ renderS [] (n+1)
 		else
       if mod n 3 == 0
         then
@@ -93,11 +95,11 @@ renderS [] n =
 renderS (h:t) n
 	| (snd h) == n 	= if mod n 9 == 0
 						          then
-                           if mod n 27 == 0
-                              then
-                                show (fst h) ++ "\n" ++ "======================" ++ "\n" ++ renderS t (n + 1)
-                              else
-                                show (fst h) ++ "\n" ++ renderS t (n + 1)
+                        if mod n 27 == 0
+                          then
+                            show (fst h) ++ "\n" ++ "======================" ++ "\n" ++ renderS t (n + 1)
+                          else
+                            show (fst h) ++ "\n" ++ renderS t (n + 1)
 						          else do
                         if mod n 3 == 0
                           then
@@ -106,11 +108,11 @@ renderS (h:t) n
                             show (fst h) ++ " " ++ renderS t (n + 1)
 	| otherwise 	= if mod n 9 == 0
 						        then
-                         if mod n 27 == 0
-                            then
-                              "_" ++ "\n" ++ "======================" ++ "\n" ++ renderS (h:t) (n + 1)
-                            else
-                               "_" ++ "\n" ++ renderS (h:t) (n + 1)
+                      if mod n 27 == 0
+                        then
+                          "_" ++ "\n" ++ "======================" ++ "\n" ++ renderS (h:t) (n + 1)
+                        else
+                          "_" ++ "\n" ++ renderS (h:t) (n + 1)
 						        else
                       if mod n 3 == 0
                         then
@@ -123,6 +125,18 @@ render s = putStr(renderS s 1)
 
 myprint :: Sudoku -> String
 myprint s = renderS s 1
+
+askForSave :: Sudoku -> IO()
+askForSave s = do
+                putStrLn "Do you want to save? (yes/no)"
+                saveV <- getLine
+                if saveV `elem` ["y","yes","ye","oui"]
+                  then do
+                    putStrLn "Please enter the filename you want it to save to:"
+                    filename <-getLine
+                    writeFile (filename ++ ".txt") (myprint s)
+                  else do
+                    putStr ""
 
 -- give a hint that is the first empty cell in the present sudoku according to the solution
 giveHint:: Sudoku -> Sudoku -> Sudoku
