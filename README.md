@@ -12,7 +12,7 @@ The smallest sudoku that can be solved with one possible solution has 17 known n
 
 A hint is to give the first empty cell in the present sudoku while a solution is present the solution computed by the solver directed on the screen. Player can do the sudoku and give his/her intermediate step to the solver to check if he/she is on the right track, which means if that number is placed on that position, then the solver will check whether there is one possible solution. When there is no solution, the solver will report to the player that the game is not solvable.
 
-We will give player the solution of each step by clearing printing it on the terminal. Also players can save their intermediate steps to the disk such that they can use it later.
+We will give player the solution of each step by clearing printing it on the terminal. Also player can save his/her intermediate steps to the disk such that he/she can use it later.
 
 -------------------------------------------------
 

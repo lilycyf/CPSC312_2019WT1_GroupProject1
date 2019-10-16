@@ -59,7 +59,7 @@ play s =
 							line2 <- getLine
 							let posit = (read line1 :: Integer)
 							let value = (read line2 :: Integer)
-							if (checkValid value posit) == False
+							if (checkValid value posit s) == False
 								then do
 									putStrLn "Invalid input"
 									play s
@@ -76,13 +76,16 @@ play s =
 
 
 -- check (value, position) is valid
-checkValid :: Integer -> Integer -> Bool
-checkValid v p = if ((p <= 0) || (p > 81))
-                    then False
-                    else
-                      if ((v < 0) || (v > 9))
-                        then False
-                        else True
+checkValid :: Integer -> Integer -> Sudoku -> Bool
+checkValid v p s  = if ((p <= 0) || (p > 81))
+                		then False
+                    	else
+                      		if ((v < 0) || (v > 9))
+                        		then False
+                        		else 
+									if p `elem` (position s)
+										then False
+										else True
 
 
 -- helper function to print the grids
@@ -261,7 +264,7 @@ myRead s n =
 			let posit = (read line1 :: Integer)
 			let value = (read line2 :: Integer)
 			let newS = makeMove (value, posit) s
-			if (checkValid value posit) == False
+			if (checkValid value posit s) == False
 				then do
 					putStrLn "Invalid input"
 					myRead s n
