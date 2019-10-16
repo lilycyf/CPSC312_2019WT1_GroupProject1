@@ -59,15 +59,31 @@ play s =
 							line2 <- getLine
 							let posit = (read line1 :: Integer)
 							let value = (read line2 :: Integer)
-							let newS = makeMove (value, posit) s
-							let newSolutions = solve newS
-							if newSolutions == []
+							if (checkValid value posit) == False
 								then do
-									putStrLn "There is no solution after this movement!"
-									putStrLn "The movement has been reverted."
+									putStrLn "Invalid input"
 									play s
 								else do
-									play newS
+								let newS = makeMove (value, posit) s
+								let newSolutions = solve newS
+								if newSolutions == []
+									then do
+										putStrLn "There is no solution after this movement!"
+										putStrLn "The movement has been reverted."
+										play s
+									else do
+										play newS
+
+
+-- check (value, position) is valid
+checkValid :: Integer -> Integer -> Bool
+checkValid v p = if ((p <= 0) || (p > 81))
+                    then False
+                    else
+                      if ((v < 0) || (v > 9))
+                        then False
+                        else True
+
 
 -- helper function to print the grids
 renderS :: Sudoku -> Integer -> String
@@ -245,7 +261,12 @@ myRead s n =
 			let posit = (read line1 :: Integer)
 			let value = (read line2 :: Integer)
 			let newS = makeMove (value, posit) s
-			myRead newS (n + 1)
+			if (checkValid value posit) == False
+				then do
+					putStrLn "Invalid input"
+					myRead s n
+				else 
+					myRead newS (n + 1)
 		else play s
 
 
