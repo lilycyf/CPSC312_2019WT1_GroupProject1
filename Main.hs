@@ -42,10 +42,14 @@ play s =
 			render s
 			putStrLn ""
 			askForSave s
-			let oldSolution = sortBy sortGT (head (solve s))
-			putStrLn "Do you need hint? (yes/no)"
-			hint <- getLine
-			if hint `elem` ["y","yes","ye","oui"]
+			if (solve s) == []
+			  then do
+			    putStrLn "There is no solution"
+			  else do
+			    let oldSolution = sortBy sortGT (head (solve s))
+			    putStrLn "Do you need hint? (yes/no)"
+			    hint <- getLine
+			    if hint `elem` ["y","yes","ye","oui"]
 				then play (giveHint oldSolution s)
 				else do
 					putStrLn "Do you want to see the solution? (yes/no)"
@@ -267,8 +271,12 @@ myRead s n =
 			if (checkValid value posit s) == False
 				then do
 					putStrLn "Invalid input"
+					render s
+					putStrLn ""
 					myRead s n
-				else 
+				else do
+				    	render newS
+					putStrLn "" 
 					myRead newS (n + 1)
 		else play s
 
