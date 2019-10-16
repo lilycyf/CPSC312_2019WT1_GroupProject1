@@ -43,12 +43,12 @@ play s =
 			let oldSolution = sortBy sortGT (head (solve s))
 			putStrLn "Do you need hint? (yes/no)"
 			hint <- getLine
-			if hint == "yes"
+			if hint `elem` ["y","yes","ye","oui"]
 				then play (giveHint oldSolution s)
 				else do
 					putStrLn "Do you want to see the solution? (yes/no)"
 					cheat <- getLine
-					if cheat == "yes"
+					if cheat `elem` ["y","yes","ye","oui"]
 						then play oldSolution
 						else do
 							putStrLn "Input your sudoku movement position Natural[1, 81]"
@@ -68,76 +68,61 @@ play s =
 									play newS
 
 -- helper function to print the grids
-renderS :: Sudoku -> Integer -> IO()
+renderS :: Sudoku -> Integer -> String
 
 renderS s 81 =
       if length s == 0
-          then do putStr "_"
-          else do putStr(show (fst (head s)))
+          then "_"
+          else show (fst (head s))
 
 renderS [] n =
 	if mod n 9 == 0
-		then do
-         putStr "_"
-         putStrLn ""
+		then
          if mod n 27 == 0
-            then do
-              putStrLn "======================"
-              renderS [] (n+1)
-            else do
-              renderS [] (n+1)
-		else do
+            then
+              "_" ++ "\n" ++ "======================" ++ "\n" ++ renderS [] (n+1)
+            else
+              "_" ++ "\n" ++ renderS [] (n+1)
+		else
       if mod n 3 == 0
-        then do
-          putStr "_ | "
-          renderS [] (n+1)
+        then
+          "_ | " ++ renderS [] (n+1)
         else do
-          putStr "_ "
-          renderS [] (n+1)
+          "_ " ++ renderS [] (n+1)
 
 renderS (h:t) n
 	| (snd h) == n 	= if mod n 9 == 0
-						          then do
-                           putStr(show (fst h))
-                           putStrLn ""
+						          then
                            if mod n 27 == 0
-                              then do
-                                putStrLn "======================"
-                                renderS t (n + 1)
-                              else do
-                                renderS t (n + 1)
+                              then
+                                show (fst h) ++ "\n" ++ "======================" ++ "\n" ++ renderS t (n + 1)
+                              else
+                                show (fst h) ++ "\n" ++ renderS t (n + 1)
 						          else do
                         if mod n 3 == 0
-                          then do
-                            putStr(show (fst h))
-                            putStr " | "
-                            renderS t (n + 1)
-                          else do
-                            putStr(show (fst h))
-                            putStr " "
-                            renderS t (n + 1)
+                          then
+                            show (fst h) ++ " | " ++ renderS t (n + 1)
+                          else
+                            show (fst h) ++ " " ++ renderS t (n + 1)
 	| otherwise 	= if mod n 9 == 0
-						        then do
-                         putStr "_"
-                         putStrLn ""
+						        then
                          if mod n 27 == 0
-                            then do
-                              putStrLn "======================"
-                              renderS (h:t) (n + 1)
-                            else do
-                              renderS (h:t) (n + 1)
-						        else do
+                            then
+                              "_" ++ "\n" ++ "======================" ++ "\n" ++ renderS (h:t) (n + 1)
+                            else
+                               "_" ++ "\n" ++ renderS (h:t) (n + 1)
+						        else
                       if mod n 3 == 0
-                        then do
-                          putStr "_ | "
-                          renderS (h:t) (n + 1)
-                        else do
-                          putStr "_ "
-                          renderS (h:t) (n + 1)
+                        then
+                          "_ | " ++ renderS (h:t) (n + 1)
+                        else
+                          "_ " ++ renderS (h:t) (n + 1)
 
 render :: Sudoku -> IO()
-render s = renderS s 1
+render s = putStr(renderS s 1)
 
+myprint :: Sudoku -> String
+myprint s = renderS s 1
 
 -- give a hint that is the first empty cell in the present sudoku according to the solution
 giveHint:: Sudoku -> Sudoku -> Sudoku
