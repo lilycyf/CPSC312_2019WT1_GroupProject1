@@ -61,13 +61,13 @@ play s =
 							line1 <- getLine
 							putStrLn "Input your sudoku movement value Natural[0, 9]"
 							line2 <- getLine
-							let posit = (read line1 :: Integer)
-							let value = (read line2 :: Integer)
-							if (checkValid value posit s) == False
+							if (checkValid line2 line1 s) == False
 								then do
 									putStrLn "Invalid input"
 									play s
 								else do
+								let posit = (read line1 :: Integer)
+								let value = (read line2 :: Integer)
 								let newS = makeMove (value, posit) s
 								let newSolutions = solve newS
 								if newSolutions == []
@@ -80,16 +80,18 @@ play s =
 
 
 -- check (value, position) is valid
-checkValid :: Integer -> Integer -> Sudoku -> Bool
-checkValid v p s  = if ((p <= 0) || (p > 81))
-                		then False
-                    	else
-                      		if ((v < 0) || (v > 9))
-                        		then False
-                        		else 
-									if p `elem` (position s)
+checkValid :: String -> String -> Sudoku -> Bool
+checkValid v p s  = 
+			if p `elem` ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81"]
+                		then 
+							if v `elem` ["0","1","2","3","4","5","6","7","8","9"]
+								then do
+									let posit = (read p :: Integer)
+									if posit `elem` (position s)
 										then False
 										else True
+								else False
+                    		else False
 
 
 -- helper function to print the grids
@@ -265,16 +267,16 @@ myRead s n =
 			line1 <- getLine
 			putStrLn "Input your sudoku movement value Natural[0, 9]"
 			line2 <- getLine
-			let posit = (read line1 :: Integer)
-			let value = (read line2 :: Integer)
-			let newS = makeMove (value, posit) s
-			if (checkValid value posit s) == False
+			if (checkValid line2 line1 s) == False
 				then do
 					putStrLn "Invalid input"
 					render s
 					putStrLn ""
 					myRead s n
 				else do
+					let posit = (read line1 :: Integer)
+					let value = (read line2 :: Integer)
+					let newS = makeMove (value, posit) s
 				    	render newS
 					putStrLn "" 
 					myRead newS (n + 1)
