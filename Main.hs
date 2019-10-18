@@ -277,9 +277,16 @@ myRead s n =
 					let posit = (read line1 :: Integer)
 					let value = (read line2 :: Integer)
 					let newS = makeMove (value, posit) s
-				    	render newS
-					putStrLn "" 
-					myRead newS (n + 1)
+					if initialCheck newS
+					  then do
+				    	    render newS
+					    putStrLn "" 
+					    myRead newS (n + 1)
+					  else do
+					    putStrLn "Invalid input"
+					    render s
+					    putStrLn ""
+					    myRead s n
 		else play s
 
 
